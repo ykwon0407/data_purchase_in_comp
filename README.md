@@ -8,7 +8,7 @@ This repository provides a key implementation of the paper *[Competition over da
 python3 launcher.py run --exp-id 004IY --run-id 0
 ```
 
-This will run the first experiment `004IY` is defined in `config.py`. `004IY` considers the `insurance` user distribution and 18 machine learning competitors with 400 initial budgets. By default, a competitor uses the uncertainty-based active learning data purchase algorithm. It will create `special_log` in the `results` folder. With the outputs, `notebooks/Insurance_data_purchase.ipynb` shows how to evaluate metrics used in the paper.
+This will run the first experiment `004IY` defined in `config.py`. Here, `004IY` considers the `insurance` user distribution and 18 machine learning competitors with 400 initial budgets. By default, all ML competitors use the uncertainty-based active learning data purchase algorithm. Implementation details are available in the paper. The Python command above create `config.pickle` and `special_log` in the `results` folder. With the outputs, `notebooks/Insurance_data_purchase.ipynb` shows how to evaluate metrics used in the paper.
 
 ### Authors
 
