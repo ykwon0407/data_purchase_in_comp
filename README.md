@@ -17,3 +17,10 @@ This will run the first experiment `004IY` defined in `config.py`. Here, `004IY`
 - Tony Ginart (tginart (at) stanford (dot) edu)
 
 - James Zou (jamesz (at) stanford (dot) edu)
+
+### References
+
+- P. van der Putten and M. van Someren (eds) . CoIL Challenge 2000: The Insurance Company Case.  Published by Sentient Machine Research, Amsterdam. Also a Leiden Institute of Advanced Computer Science Technical Report 2000-09. June 22, 2000. 
+
+
+
