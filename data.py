@@ -4,7 +4,6 @@ import pandas as pd
 import torch
 import torch.nn.functional as F
 import torchvision
-import torchvision.transforms as Transf
 from torch.utils.data import Dataset
 
 class tabular_dataset(Dataset):

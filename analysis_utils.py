@@ -6,12 +6,9 @@ import pickle, glob, os, re, sys
 import multiprocessing
 from joblib import Parallel, delayed
 
-sys.path.insert(0,'..')
-
 from data import *
 from agent import *
-from auction import *
-from user import *
+from competition import *
 from simulator import *
 
 def _depickle(run, log=True):
@@ -54,8 +51,8 @@ def _y_hats(logger):
     Y_hat[-1] = torch.tensor(logger['y'])
     return Y_hat.numpy()
 
-def _bids(logger):
-    return torch.tensor(logger['bidder']).int().numpy()    
+def _buys(logger):
+    return torch.tensor(logger['buyer']).int().numpy()    
 
 def _test_pred(logger):
     A = logger['agents']

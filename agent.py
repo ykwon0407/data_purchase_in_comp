@@ -158,7 +158,7 @@ class buying_mlpAgent(mlpAgent):
                  hidden=512, task='C', epoch=10, lr=0.001, bsize=256,
                  retrain_limit=25, retrain_max=10**7,
                  n_budget=50, AL_strategy='first', AL_parameter=0.75):
-        super(bidding_mlpAgent, self).__init__(X=X, y=y, x_dim=x_dim, n_class=n_class,
+        super(buying_mlpAgent, self).__init__(X=X, y=y, x_dim=x_dim, n_class=n_class,
                                                 n_layers=n_layers, hidden=hidden, task=task,
                                                 epoch=epoch, lr=lr, bsize=bsize, retrain_limit=retrain_limit,
                                                 retrain_max=retrain_max)
@@ -184,7 +184,7 @@ class buying_mlpAgent(mlpAgent):
                 if (entropy > -self.AL_parameter*np.log(1/self.n_class)): 
                     purchase = 1
             else:
-                assert False, f'Check bidding AL_strategy. The current {self.AL_strategy}'
+                assert False, f'Check AL_strategy. The current {self.AL_strategy}'
 
         return purchase
 

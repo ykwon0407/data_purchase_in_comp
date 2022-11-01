@@ -1,11 +1,10 @@
 from agent import buying_mlpAgent
-from auction import data_purchase_classification_competition
+from competition import data_purchase_classification_competition
 from data import tabular_dataset
-from user import *
 import argh, os, pickle, copy, itertools
 import numpy as np
 
-N_EPISODE=1 # One may want to change this part.
+N_EPISODE=20 
 N_BUYERS=18
 
 # Insurance
@@ -35,32 +34,31 @@ def generate_insurance_exp_run(expno_name, n_budget, n_seed, max_iter, n_episode
     r_id = 0
     run_temp = dict()
     run_temp['use-gpu'] = False
-    run_temp['auction'] = data_purchase_classification_competition
-    run_temp['auction_args'] = {'c':0, 'r':1}
+    run_temp['competition'] = data_purchase_classification_competition
+    run_temp['competition_args'] = {'c':0, 'r':1}
     run_temp['dataset'] = tabular_dataset
     run_temp['dataset_init'] = tabular_dataset
-    run_temp['users'] = []
-    run_temp['dargs'] = {'path':'/home/users/yckwon/data/competing_AI/',
+    # run_temp['users'] = []
+    run_temp['dargs'] = {'path':'./data/',
                         'csv_prefix':'insurance',
                         'noisy_prop':noisy_prop}
     run_temp['print-freq']=500
     run_temp['print-test-freq']=100
     run_temp['max-iters'] = max_iter
-    run_temp['special-log'] = ['agg_corr','y_hats','bidder','test_pred']
+    run_temp['special-log'] = ['agg_corr','y_hats','buyer','test_pred']
         
     for seed in range(n_episode):
         run = copy.deepcopy(run_temp)
-        run['auction_args']['alpha'] = alpha
+        run['competition_args']['alpha'] = alpha
         run['seed'] = seed
         run['agents'] = []
-        for i in N_BUYERS:
+        for i in range(N_BUYERS):
             run['agents'].append(uncertain_buyer)
         run['r_id'] = r_id
         r_id += 1
         runs.append(run)
 
     return exp, runs 
-
 
 def config001IY():
     expno_name, n_budget, n_seed, max_iter, n_episode = '001IY', 0, 100, 10000, N_EPISODE

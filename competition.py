@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from information import mi2eff
 
 class base_competition(nn.Module):
     def __init__(self, agents, c, r, datastream):

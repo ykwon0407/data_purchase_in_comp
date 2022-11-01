@@ -1,6 +1,5 @@
-from auction import *
-from user import *
-from analysis.analysis_utils import _y_hats, _agg_corr, _bids, _test_pred
+from competition import *
+from analysis_utils import _y_hats, _agg_corr, _buys, _test_pred
 import dill as pickle
 import torch, torchvision
 import torch.utils 
@@ -19,22 +18,8 @@ def setup_agents(config):
         agents.append(agent)
     return agents
 
-def setup_users(config):
-    users = []
-    for i,u in enumerate(config['users']):
-        user = u['class'](**u['args'])
-        user.id = i  
-        users.append(user)
-    return users
-
-def setup_users_special(config, agents, datastream):
-    # a routine for setting up users with special args
-    for user in datastream.users:
-        if type(user) == perfect_user:
-            user.setup_learners(agents)
-
 def setup_mechanism(config, agents, datastream):
-    return config['auction'](agents,datastream, **config['auction_args'])
+    return config['competition'](agents,datastream, **config['competition_args'])
         
 def init_agent_data(config, agents):
     # apply training on seed data, if needed
@@ -110,11 +95,11 @@ def _special_log(config,logger):
     
     market_share_list = logger['winner']
     special_log['market_share_list'] = market_share_list
-    np.savez(open('special_log','wb'),**special_log) 
+    np.savez(open('results/special_log','wb'),**special_log) 
     return special_log
 
 
-def _sim(config, auction, datastream, logger, test_datastream=None):
+def _sim(config, comp, datastream, logger, test_datastream=None):
     _set_seed(config) 
     run_id = config['r_id'] if 'r_id' in config else ''
 
@@ -127,21 +112,21 @@ def _sim(config, auction, datastream, logger, test_datastream=None):
             print(f'Run{run_id}: simulation complete')
             break
             
-        auction.logger = logger 
-        auction.run(data, logger)
+        comp.logger = logger 
+        comp.run(data, logger)
 
         if i % config['print-freq'] == 0:
             print(f'Run{run_id}: At round {i}',flush=True)
 
     # LAST TRAIN
-    auction._last_train()
+    comp._last_train()
 
     # TEST
     tmp_list = []
     for j, test_data in enumerate(test_datastream):
         if j >= 3000:
             break
-        tmp = auction.score_test_models(test_data)
+        tmp = comp.score_test_models(test_data)
         tmp_list.append(tmp)
     tmp_list = np.array(tmp_list)
     print(f'{len(tmp_list)}, Marginal acc: {np.mean(tmp_list)}',flush=True)
@@ -153,7 +138,7 @@ def _print_result(agents):
 
     wins_list = []
     for j,a in enumerate(agents):
-        print(f'Bidding policy: {a.bidding_strategy}')
+        print(f'AL strategy: {a.AL_strategy}')
         print(f'Initial budgets: {a.initial_budget}')
         print(f'Market share: {a.wins}')
         wins_list.append(a.wins)
@@ -166,11 +151,11 @@ def main(config):
     init_agent_data(config, agents)
     datastream = setup_datastream(config)
     test_datastream = setup_datastream(config, is_train=False)
-    datastream.users = setup_users(config)
-    auction = setup_mechanism(config, agents, datastream)
-    setup_users_special(config, agents, datastream)
+    # datastream.users = setup_users(config)
+    comp = setup_mechanism(config, agents, datastream)
+    # setup_users_special(config, agents, datastream)
     logger = setup_log(config, agents)
-    _sim(config, auction, datastream, logger, test_datastream)
+    _sim(config, comp, datastream, logger, test_datastream)
     _special_log(config, logger)
     _print_result(agents)
 
